@@ -1,10 +1,10 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include "comPort.hpp"
 
 
 int ComPort::connect()
 {
-	/* откроем com порт */
+	/* РѕС‚РєСЂРѕРµРј com РїРѕСЂС‚ */
 	hComPort = ::CreateFile((LPCSTR)name.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hComPort)
 	{
@@ -13,7 +13,7 @@ int ComPort::connect()
 
 	DCB tmpParam = { 0 };
 
-	/* получим параметры и установим свои */
+	/* РїРѕР»СѓС‡РёРј РїР°СЂР°РјРµС‚СЂС‹ Рё СѓСЃС‚Р°РЅРѕРІРёРј СЃРІРѕРё */
 	tmpParam.DCBlength = sizeof(tmpParam);
 	if (!GetCommState(hComPort, &tmpParam))
 	{
@@ -36,7 +36,7 @@ int ComPort::connect()
 		return err;
 	}
 
-	/* выставим таймауты */
+	/* РІС‹СЃС‚Р°РІРёРј С‚Р°Р№РјР°СѓС‚С‹ */
 	if (!SetCommTimeouts(hComPort, &comTimeouts)) 
 	{
 		DWORD err = GetLastError();

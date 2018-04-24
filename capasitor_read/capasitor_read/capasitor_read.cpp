@@ -1,4 +1,4 @@
-// capasitor_read.cpp: определяет точку входа для консольного приложения.
+п»ї// capasitor_read.cpp: РѕРїСЂРµРґРµР»СЏРµС‚ С‚РѕС‡РєСѓ РІС…РѕРґР° РґР»СЏ РєРѕРЅСЃРѕР»СЊРЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
 //
 
 #include "stdafx.h"
@@ -10,13 +10,13 @@
 
 enum
 {
-	TEST_IDLE = 0,		/* простаиваем, горит зеленый светодиод */
-	TEST_PREPARE,       /* готовимся к измерению, идет заряд конденсатора, горит красный светодиод */
-	TEST_MESURE,        /* идет измерение, конденсатор разряжается, горит красный светодиод */
+	TEST_IDLE = 0,		/* РїСЂРѕСЃС‚Р°РёРІР°РµРј, РіРѕСЂРёС‚ Р·РµР»РµРЅС‹Р№ СЃРІРµС‚РѕРґРёРѕРґ */
+	TEST_PREPARE,       /* РіРѕС‚РѕРІРёРјСЃСЏ Рє РёР·РјРµСЂРµРЅРёСЋ, РёРґРµС‚ Р·Р°СЂСЏРґ РєРѕРЅРґРµРЅСЃР°С‚РѕСЂР°, РіРѕСЂРёС‚ РєСЂР°СЃРЅС‹Р№ СЃРІРµС‚РѕРґРёРѕРґ */
+	TEST_MESURE,        /* РёРґРµС‚ РёР·РјРµСЂРµРЅРёРµ, РєРѕРЅРґРµРЅСЃР°С‚РѕСЂ СЂР°Р·СЂСЏР¶Р°РµС‚СЃСЏ, РіРѕСЂРёС‚ РєСЂР°СЃРЅС‹Р№ СЃРІРµС‚РѕРґРёРѕРґ */
 	TEST_STATE_COUNT
 };
 
-/* magic с которого начинаются данные */
+/* magic СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РёРЅР°СЋС‚СЃСЏ РґР°РЅРЅС‹Рµ */
 static const unsigned char magic0 = 0xbe;
 static const unsigned char magic1 = 0xde;
 
@@ -27,11 +27,11 @@ static long double nano =  1e-9;
 static long double piko =  1e-12;
 
 
-/* размер пакета с данными */
+/* СЂР°Р·РјРµСЂ РїР°РєРµС‚Р° СЃ РґР°РЅРЅС‹РјРё */
 static const unsigned int packSize = 8;
 
-/* паузы различной длительности */
-static const DWORD	waitConnectSleep = 100;					/*ms*/
+/* РїР°СѓР·С‹ СЂР°Р·Р»РёС‡РЅРѕР№ РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё */
+static const DWORD	waitConnectSleep = 100;				/*ms*/
 static const DWORD	waitDataSleep = 40;					/*ms*/
 static const DWORD  shortWaitSleep = 2;					/*ms*/
 
@@ -40,15 +40,15 @@ static const char waitSign[] = { '-', '\\', '|', '/' };
 
 static const unsigned int freqMultiplier = 1000000;
 
-/* константы для распарсивания данных в пакете */
+/* РєРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ СЂР°СЃРїР°СЂСЃРёРІР°РЅРёСЏ РґР°РЅРЅС‹С… РІ РїР°РєРµС‚Рµ */
 static const unsigned int stateShift = 2;
 static const unsigned int freqShift = 3;
 static const unsigned int ticksShift = 4;
 
-/* количество "пустых" чтений, после которого детектируется разрыв связи */
-static const unsigned int voidReadMax = 100;		/* при паузе в ~40 ms между чтениями, отключение MSP430 будет обнаружено примерно через 4 секунды */
+/* РєРѕР»РёС‡РµСЃС‚РІРѕ "РїСѓСЃС‚С‹С…" С‡С‚РµРЅРёР№, РїРѕСЃР»Рµ РєРѕС‚РѕСЂРѕРіРѕ РґРµС‚РµРєС‚РёСЂСѓРµС‚СЃСЏ СЂР°Р·СЂС‹РІ СЃРІСЏР·Рё */
+static const unsigned int voidReadMax = 100;		/* РїСЂРё РїР°СѓР·Рµ РІ ~40 ms РјРµР¶РґСѓ С‡С‚РµРЅРёСЏРјРё, РѕС‚РєР»СЋС‡РµРЅРёРµ MSP430 Р±СѓРґРµС‚ РѕР±РЅР°СЂСѓР¶РµРЅРѕ РїСЂРёРјРµСЂРЅРѕ С‡РµСЂРµР· 4 СЃРµРєСѓРЅРґС‹ */
 
-/* буферы для чтения данных */
+/* Р±СѓС„РµСЂС‹ РґР»СЏ С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С… */
 static char dataPack[packSize];
 static char dummyData[1024];
 
@@ -74,8 +74,8 @@ int main()
 	unsigned int voidRead = 0;
 	bool noConnection = true;
 
-	/* попросим ввести имя порта, из которого нужно читать
-	и сопротивление резистора, с которым производилось измерение (см. в проекте CCS для MSP430 Launchpad)*/
+	/* РїРѕРїСЂРѕСЃРёРј РІРІРµСЃС‚Рё РёРјСЏ РїРѕСЂС‚Р°, РёР· РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ С‡РёС‚Р°С‚СЊ
+	Рё СЃРѕРїСЂРѕС‚РёРІР»РµРЅРёРµ СЂРµР·РёСЃС‚РѕСЂР°, СЃ РєРѕС‚РѕСЂС‹Рј РїСЂРѕРёР·РІРѕРґРёР»РѕСЃСЊ РёР·РјРµСЂРµРЅРёРµ (СЃРј. РІ РїСЂРѕРµРєС‚Рµ CCS РґР»СЏ MSP430 Launchpad)*/
 	cout << "Please, enter com port name: ";
 	cin >> comPortName;
 	cout << "Please, enter resistance (Ohms): ";
@@ -83,19 +83,19 @@ int main()
 
 	ComPort comPort(comPortName, 8, 9600, NOPARITY, ONESTOPBIT);
 
-	/* основной цикл - вычитываем пакет данных и парсим его */
+	/* РѕСЃРЅРѕРІРЅРѕР№ С†РёРєР» - РІС‹С‡РёС‚С‹РІР°РµРј РїР°РєРµС‚ РґР°РЅРЅС‹С… Рё РїР°СЂСЃРёРј РµРіРѕ */
 	while (true)
 	{
-		/* если нет подключения */
+		/* РµСЃР»Рё РЅРµС‚ РїРѕРґРєР»СЋС‡РµРЅРёСЏ */
 		if (noConnection)
 		{
-			/* ждем подключения */
+			/* Р¶РґРµРј РїРѕРґРєР»СЋС‡РµРЅРёСЏ */
 			waitConnection(comPort);
 
 			cout << endl << "Connection success" << endl;
 			noConnection = false;
 
-			/* вычитаем все старые данные, которые есть в буфере последовательного порта */
+			/* РІС‹С‡РёС‚Р°РµРј РІСЃРµ СЃС‚Р°СЂС‹Рµ РґР°РЅРЅС‹Рµ, РєРѕС‚РѕСЂС‹Рµ РµСЃС‚СЊ РІ Р±СѓС„РµСЂРµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕРіРѕ РїРѕСЂС‚Р° */
 			while ((nBytes = comPort.read(dummyData, sizeof(dummyData))) == sizeof(dummyData));
 
 			currentState = TEST_STATE_COUNT;
@@ -107,13 +107,13 @@ int main()
 
 		if (nRead == sizeof(dataPack))
 		{
-			/* разбираем полученные данные */
+			/* СЂР°Р·Р±РёСЂР°РµРј РїРѕР»СѓС‡РµРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ */
 			voidRead = 0;
 			state = dataPack[stateShift];
 			freq = dataPack[freqShift];
 			ticks = *(unsigned int*)&dataPack[ticksShift];
 
-			/* если данные изменились */
+			/* РµСЃР»Рё РґР°РЅРЅС‹Рµ РёР·РјРµРЅРёР»РёСЃСЊ */
 			if ((currentState != state) || (currentTicks != ticks))
 			{
 				printData(state, ticks, freq, resist);
@@ -126,7 +126,7 @@ int main()
 			std::cout << "Some error occured while reading form " << comPort.getName() << std::endl;
 			return -1;
 		}
-		else /* ничего не прочитали */
+		else /* РЅРёС‡РµРіРѕ РЅРµ РїСЂРѕС‡РёС‚Р°Р»Рё */
 		{
 			if (voidRead < voidReadMax)
 			{
@@ -147,12 +147,12 @@ int main()
 }
 
 
-/* вычисление емкости и вывод в консоль */
+/* РІС‹С‡РёСЃР»РµРЅРёРµ РµРјРєРѕСЃС‚Рё Рё РІС‹РІРѕРґ РІ РєРѕРЅСЃРѕР»СЊ */
 static void printData(char state, unsigned int ticks, unsigned int freq, unsigned int res)
 {
 	cout << "\r                                                                            \r";
 
-	/* смотрим в каком режиме сейчас MSP430 и выводим информацию */
+	/* СЃРјРѕС‚СЂРёРј РІ РєР°РєРѕРј СЂРµР¶РёРјРµ СЃРµР№С‡Р°СЃ MSP430 Рё РІС‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ */
 	switch (state)
 	{
 		case TEST_IDLE:
@@ -210,7 +210,7 @@ static void printData(char state, unsigned int ticks, unsigned int freq, unsigne
 }
 
 
-/* вычитать пакет с данными */
+/* РІС‹С‡РёС‚Р°С‚СЊ РїР°РєРµС‚ СЃ РґР°РЅРЅС‹РјРё */
 static int readData(ComPort &port, char* buf, size_t size)
 {
 	unsigned char mag0 = 0, mag1 = 0;
@@ -229,20 +229,20 @@ static int readData(ComPort &port, char* buf, size_t size)
 		return 0;
 	}
 
-	/* пытаемся прочитать первый байт magic */
+	/* РїС‹С‚Р°РµРјСЃСЏ РїСЂРѕС‡РёС‚Р°С‚СЊ РїРµСЂРІС‹Р№ Р±Р°Р№С‚ magic */
 	int reallyRead = port.read((char*)&mag0, sizeof(mag0));
 
 	if (sizeof(mag0) == reallyRead)
 	{
 		if (mag0 == magic0)
 		{
-			/* пытаемся прочитать второй байт magic */
+			/* РїС‹С‚Р°РµРјСЃСЏ РїСЂРѕС‡РёС‚Р°С‚СЊ РІС‚РѕСЂРѕР№ Р±Р°Р№С‚ magic */
 			reallyRead = port.read((char*)&mag1, sizeof(mag1));
 			if (sizeof(mag1) == reallyRead)
 			{
 				if (mag1 == magic1)
 				{
-					needData = size - 2;  /* размер данных = размер пакета - размер magic*/
+					needData = size - 2;  /* СЂР°Р·РјРµСЂ РґР°РЅРЅС‹С… = СЂР°Р·РјРµСЂ РїР°РєРµС‚Р° - СЂР°Р·РјРµСЂ magic*/
 				}
 			}
 			else if (reallyRead < 0)
@@ -256,7 +256,7 @@ static int readData(ComPort &port, char* buf, size_t size)
 		cout << "can't read magic0 byte from " << port.getName() << ". RealyRead " << reallyRead << endl;
 	}
 
-	/* magic вычитан, нужно вычитать остальное */
+	/* magic РІС‹С‡РёС‚Р°РЅ, РЅСѓР¶РЅРѕ РІС‹С‡РёС‚Р°С‚СЊ РѕСЃС‚Р°Р»СЊРЅРѕРµ */
 	while (needData)
 	{
 		if ((reallyRead = port.read(&dataPack[packSize - needData], needData)) < 0)
@@ -272,13 +272,13 @@ static int readData(ComPort &port, char* buf, size_t size)
 
 	if (nBytes != 0)
 	{
-		nBytes += 2;    /* + 2 байта magic*/
+		nBytes += 2;    /* + 2 Р±Р°Р№С‚Р° magic*/
 	}
 
 	return nBytes;
 }
 
-/* функция ожидает подключение устройства к последовательному порту */
+/* С„СѓРЅРєС†РёСЏ РѕР¶РёРґР°РµС‚ РїРѕРґРєР»СЋС‡РµРЅРёРµ СѓСЃС‚СЂРѕР№СЃС‚РІР° Рє РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕРјСѓ РїРѕСЂС‚Сѓ */
 static void waitConnection(ComPort &port)
 {
 	int res = -1;
@@ -309,7 +309,7 @@ static void waitConnection(ComPort &port)
 }
 
 
-/* функция вычисляет емкость */
+/* С„СѓРЅРєС†РёСЏ РІС‹С‡РёСЃР»СЏРµС‚ РµРјРєРѕСЃС‚СЊ */
 static long double calcCapacity(unsigned int freq, unsigned int ticks, unsigned int resistance)
 {
 	long double timeInSec = (1.0L / (freq * freqMultiplier)) * ticks;
